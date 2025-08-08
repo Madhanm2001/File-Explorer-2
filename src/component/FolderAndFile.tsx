@@ -21,7 +21,7 @@ const FolderAndFile = ({ data }: any) => {
     }, [initialData])
     console.log(initialData, "initialData")
 
-    const AddFolder = (id: any, name: any, isFolder: any) => {
+    const AddFolderandFile = (id: any, name: any, isFolder: any) => {
         const arrObj = addFolder(initialData, id, name, isFolder)
         setInitialData(arrObj)
     }
@@ -71,9 +71,7 @@ const flattenObject = (data:any) => {
   const recur = (items:any, padding = 0) => {
     for (let item of items) {
       const { children, ...rest } = item;
-    if(rest.name && rest.isClose!=undefined && rest.isFolder!=undefined  && rest.id ){
       result.push({ ...rest, padding });
-    }
       if (children && Array.isArray(children)) {
         recur(children, padding + 12);
       }
@@ -161,52 +159,25 @@ const flattenObject = (data:any) => {
         return copy
     }
 
-    const del = (id: any) => {
-        setActiveBox('cancel')
-        const updated = DeleteFolder(initialData, id)
-        setInitialData(updated)
+    // const del = (id: any) => {
+    //     setActiveBox('cancel')
+    //     const updated = DeleteFolder(initialData, id)
+    //     setInitialData(updated)
+    // }
+
+const DeleteFolder = (data: any[], id: number): any[] => {
+  return data.filter(item => {
+    if (item.id === id) {
+      return false;
     }
-
-    const DeleteFolder = (initialData: any, id: any) => {
-        let copy: any = [...initialData]
-        let obj: any
-        for (obj of copy) {
-            let nextObj: any = [obj]
-            let padding: any = 0
-            const flattenRecur = (nextObj: any) => {
-
-                let obj: any
-                for (obj of nextObj) {
-                    let key: any
-                    console.log(obj.id, "icheckd ")
-
-                    for (key in obj) {
-
-                        if (obj.id == id) {
-                            delete obj['name']
-                            delete obj['children']
-                            break;
-
-                        }
-
-                        if (Array.isArray(obj[key])) {
-                            padding += 20
-                            flattenRecur(obj[key])
-                        }
-                        // else{
-                        //   folder[key]=obj[key]
-                        //   if(folder.isFolder!=undefined && folder.id && folder.name){
-                        //       newArr.push({...folder,padding:padding})
-                        //   }
-                        // }
-
-                    }
-                }
-            }
-            flattenRecur(nextObj)
-        }
-        return copy
+    if (item.children && Array.isArray(item.children)) {
+      item.children = DeleteFolder(item.children, id);
     }
+    return true;
+  });
+};
+
+
 
     const addFolder = (initialData: any, id: any, name: any, isFolder: any) => {
         let copy: any = [...initialData]
@@ -249,52 +220,52 @@ const flattenObject = (data:any) => {
         return copy
     }
 
-    const FileDelete = (id: any) => {
+    const FileAndFolderDelete = (id: any) => {
         setActiveBox('cancel')
-        const updated = fileDelete(initialData, id)
+        const updated = DeleteFolder(initialData, id)
         setInitialData(updated)
 
     }
 
-    const fileDelete = (initialData: any, id: any) => {
-        let copy: any = [...initialData]
-        let obj: any
-        for (obj of copy) {
-            let nextObj: any = [obj]
-            let padding: any = 0
-            const flattenRecur = (nextObj: any) => {
+    // const fileDelete = (initialData: any, id: any) => {
+    //     let copy: any = [...initialData]
+    //     let obj: any
+    //     for (obj of copy) {
+    //         let nextObj: any = [obj]
+    //         let padding: any = 0
+    //         const flattenRecur = (nextObj: any) => {
 
-                let obj: any
-                for (obj of nextObj) {
-                    let key: any
-                    console.log(obj.id, "icheckd ")
+    //             let obj: any
+    //             for (obj of nextObj) {
+    //                 let key: any
+    //                 console.log(obj.id, "icheckd ")
 
-                    for (key in obj) {
+    //                 for (key in obj) {
 
-                        if (obj.id == id) {
-                            delete obj['name']
-                            break;
+    //                     if (obj.id == id) {
+    //                         delete obj['name']
+    //                         break;
 
-                        }
+    //                     }
 
-                        if (Array.isArray(obj[key])) {
-                            padding += 20
-                            flattenRecur(obj[key])
-                        }
-                        // else{
-                        //   folder[key]=obj[key]
-                        //   if(folder.isFolder!=undefined && folder.id && folder.name){
-                        //       newArr.push({...folder,padding:padding})
-                        //   }
-                        // }
+    //                     if (Array.isArray(obj[key])) {
+    //                         padding += 20
+    //                         flattenRecur(obj[key])
+    //                     }
+    //                     // else{
+    //                     //   folder[key]=obj[key]
+    //                     //   if(folder.isFolder!=undefined && folder.id && folder.name){
+    //                     //       newArr.push({...folder,padding:padding})
+    //                     //   }
+    //                     // }
 
-                    }
-                }
-            }
-            flattenRecur(nextObj)
-        }
-        return copy
-    }
+    //                 }
+    //             }
+    //         }
+    //         flattenRecur(nextObj)
+    //     }
+    //     return copy
+    // }
 
     const onchangeInput=(e:any)=>{
 
@@ -305,10 +276,10 @@ const flattenObject = (data:any) => {
 
 if(name.trim()){
         if(choice==='file'){
-           AddFolder(id,name,false)
+           AddFolderandFile(id,name,false)
         }
         else{
-           AddFolder(id,name,true)
+           AddFolderandFile(id,name,true)
         }
 setName('')
 setActiveBox('cancel')
@@ -344,12 +315,12 @@ setActiveBox('cancel')
                                         <FiFolderPlus style={{margin:0,color:'#ADB500',cursor:'pointer'}} onClick={() => getDataforAdd('folder',data.id)} />
                                         {/* <AiOutlineFileAdd onClick={() => AddFolder(data.id, 'ben10', false)} /> */}
                                         <AiOutlineFileAdd style={{margin:0,color:'#B56400',cursor:'pointer'}} onClick={() => getDataforAdd('file',data.id)} />
-                                        <MdDeleteOutline style={{margin:0,color:'#B50000',cursor:'pointer'}} onClick={() => { del(data.id) }} />
+                                        <MdDeleteOutline style={{margin:0,color:'#B50000',cursor:'pointer'}} onClick={() => { FileAndFolderDelete(data.id) }} />
                                     </div>
                                 </div>)
                                 : (!data.isClose && <div style={{ display: 'flex', gap: '3px',marginTop:'5px',padding: `5px ${data.padding}px`,cursor:'pointer' }} id='file'>
                                     <p style={{ color: '#ADADAD',margin:0,paddingLeft:'8px',fontSize:'14px'}}>{data.name}</p>
-                                    <MdDeleteOutline style={{color:'#B50000',cursor:'pointer'}} onClick={() => { FileDelete(data.id) }} />
+                                    <MdDeleteOutline style={{color:'#B50000',cursor:'pointer'}} onClick={() => { FileAndFolderDelete(data.id) }} />
                                 </div>)}
                         </div>)
                 })
