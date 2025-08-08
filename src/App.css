@@ -1,0 +1,13 @@
+body{
+  background-color: black;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#file:hover{
+  background-color: #1C1C1C;
+  border-radius: 5px
+}
+#folder:hover{
+  background-color: #1C1C1C;
+  border-radius: 5px
+}
