@@ -54,10 +54,9 @@ const initialData = [
 ];
 
 const FileExplorer = () => {
-    // const[data,setData]=useState(initialData)
   return (
     <div>
-        <h3 style={{color:'white'}}>Explorer</h3>
+        <h4 style={{color:'white'}}>EXPLORER</h4>
         <FolderAndFile data={initialData}/>
     </div>
   )

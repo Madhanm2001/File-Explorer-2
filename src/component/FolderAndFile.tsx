@@ -19,7 +19,7 @@ const FolderAndFile = ({ data }: any) => {
     useEffect(() => {
         flattenobj()
     }, [initialData])
-    console.log(arrayObj, "initialData")
+    console.log(initialData, "initialData")
 
     const AddFolder = (id: any, name: any, isFolder: any) => {
         const arrObj = addFolder(initialData, id, name, isFolder)
@@ -31,39 +31,60 @@ const FolderAndFile = ({ data }: any) => {
         setArrayOfObj(updated)
     }
 
+    // const flattenObject = (initialData: any) => {
+    //     let newArr: any = []
+    //     let obj: any
+    //     for (obj of initialData) {
+    //         let nextObj: any = [obj]
+    //         let padding: any = 0
+    //         const flattenRecur = (nextObj: any) => {
+    //             let obj: any
+    //             for (obj of nextObj) {
+    //                 let folder: any = {}
+    //                 let key: any
+    //                 console.log(obj.id, "icheckd ")
+    //                 for (key in obj) {
 
-    const flattenObject = (initialData: any) => {
-        let newArr: any = []
-        let obj: any
-        for (obj of initialData) {
-            let nextObj: any = [obj]
-            let padding: any = 0
-            const flattenRecur = (nextObj: any) => {
-                let obj: any
-                for (obj of nextObj) {
-                    let folder: any = {}
-                    let key: any
-                    console.log(obj.id, "icheckd ")
-                    for (key in obj) {
+    //                     if (Array.isArray(obj[key])) {
+    //                         padding += 12
+    //                         flattenRecur(obj[key])
+    //                     }
+    //                     else {
+    //                         folder[key] = obj[key]
+    //                         if (folder.isFolder != undefined && folder.id && folder.name && folder.isToggle != undefined && folder.isClose != undefined) {
+    //                             newArr.push({ ...folder, padding: padding })
+    //                         }
+    //                     }
 
-                        if (Array.isArray(obj[key])) {
-                            padding += 12
-                            flattenRecur(obj[key])
-                        }
-                        else {
-                            folder[key] = obj[key]
-                            if (folder.isFolder != undefined && folder.id && folder.name && folder.isToggle != undefined && folder.isClose != undefined) {
-                                newArr.push({ ...folder, padding: padding })
-                            }
-                        }
+    //                 }
+    //             }
+    //         }
+    //         flattenRecur(nextObj)
+    //     }
+    //     return newArr
+    // }
 
-                    }
-                }
-            }
-            flattenRecur(nextObj)
-        }
-        return newArr
+
+const flattenObject = (data:any) => {
+  let result:any = [];
+
+  const recur = (items:any, padding = 0) => {
+    for (let item of items) {
+      const { children, ...rest } = item;
+    if(rest.name && rest.isClose!=undefined && rest.isFolder!=undefined  && rest.id ){
+      result.push({ ...rest, padding });
     }
+      if (children && Array.isArray(children)) {
+        recur(children, padding + 12);
+      }
+    }
+  };
+
+  recur(data);
+  return result;
+};
+
+
 
     const toggleFold = (id: any, status: any) => {
 
