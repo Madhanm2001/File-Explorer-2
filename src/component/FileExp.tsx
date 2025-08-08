@@ -1,4 +1,5 @@
 import FolderAndFile from './FolderAndFile';
+import '../App.css'
 
 const initialData = [
   {
@@ -9,32 +10,32 @@ const initialData = [
     isClose:false,
     children: [
         { id:2, name: "index.html", isFolder: false ,isToggle:true,isClose:false,},
-        { id:3, name: "app.css", isFolder: false,isToggle:true,isClose:false,},
+        { id:3, name: "app.html", isFolder: false,isToggle:true,isClose:false,},
         {
     id:4,
-    name: "new",
+    name: "style",
     isFolder: true,
     isToggle:true,
     isClose:false,
     children: [
-        { id:5, name: "index.html", isFolder: false,isToggle:true ,isClose:false,},
-        { id:6, name: "app.css", isFolder: false ,isToggle:true,isClose:false,},
+        { id:5, name: "main.css", isFolder: false,isToggle:true ,isClose:false,},
+        { id:6, name: "index.css", isFolder: false ,isToggle:true,isClose:false,},
             {
     id:7,
-    name: "mass",
+    name: "env",
     isFolder: true,
     isToggle:true,
     isClose:false,
     children: [
-        { id:8, name: "index.html", isFolder: false ,isToggle:true,isClose:false,},
-        { id:9, name: "app.css", isFolder: false ,isToggle:true,isClose:false,},
+        { id:8, name: "node_modules",isFolder: false ,isToggle:true,isClose:false,},
+        { id:9, name: "gitignore", isFolder: false ,isToggle:true,isClose:false,},
 ]   
   },
 ],
 
     
   },
-  { id:10, name: "public.css", isFolder: false ,isToggle:true,isClose:false,},
+  { id:10, name: "public.html", isFolder: false ,isToggle:true,isClose:false,},
 ], 
   },
   {
