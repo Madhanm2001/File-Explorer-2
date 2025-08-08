@@ -336,12 +336,12 @@ setActiveBox('cancel')
             
             {(activeBox==="file"||activeBox==="folder")&&(<div style={{marginTop:'50px',color:'grey'}}>    
             <form action="">
-                 <div style={{fontWeight:700,fontSize:'15px',color:'#ADADAD'}}>{activeBox==="file"?'Enter file name':'Enter folder name'}</div>
+                 <div style={{fontWeight:700,fontSize:'15px',color:'white'}}>{activeBox==="file"?'Enter file name':'Enter folder name'}</div>
                  <input type="text" value={name} onChange={onchangeInput} style={{border:'3px grey solid',background:'black',color:'white',outline:0,height:'20px',borderRadius:'5px',marginTop:'10px'}}/>
             </form>
             <div style={{display:'flex',marginTop:'10px',gap:'10px'}}>
-                    <button style={{background:"green",border:'none',color:'#1C1C1C',padding:'8px 10px',borderRadius:'5px'}} onClick={()=>{onclickAdd(activeBox)}}>Add</button>
-                    <button style={{background:"red",border:'none',color:'#1C1C1C',padding:'8px 10px',borderRadius:'5px'}} onClick={()=>{setActiveBox('cancel')}}>cancel</button>
+                    <button style={{background:"green",border:'none',color:'white',padding:'8px 10px',borderRadius:'5px'}} onClick={()=>{onclickAdd(activeBox)}}>Add</button>
+                    <button style={{background:"red",border:'none',color:'white',padding:'8px 10px',borderRadius:'5px'}} onClick={()=>{setActiveBox('cancel')}}>cancel</button>
             </div>
             </div>)}
 
