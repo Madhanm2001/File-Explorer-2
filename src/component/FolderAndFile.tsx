@@ -19,7 +19,7 @@ const FolderAndFile = ({ data }: any) => {
     useEffect(() => {
         flattenobj()
     }, [initialData])
-    console.log(initialData, "initialData")
+    console.log(arrayObj, "initialData")
 
     const AddFolderandFile = (id: any, name: any, isFolder: any) => {
         const arrObj = addFolder(initialData, id, name, isFolder)
@@ -29,6 +29,18 @@ const FolderAndFile = ({ data }: any) => {
     const flattenobj = () => {
         const updated = flattenObject(initialData)
         setArrayOfObj(updated)
+    }
+
+    const FileAndFolderDelete = (id: any) => {
+        setActiveBox('cancel')
+        const updated = DeleteFolder(initialData, id)
+        setInitialData(updated)
+    }
+
+    const toggleFold = (id: any, status: any) => {
+
+        const updated = toggleFolder(initialData, id, status)
+        setInitialData(updated)
     }
 
     // const flattenObject = (initialData: any) => {
@@ -72,6 +84,9 @@ const flattenObject = (data:any) => {
     for (let item of items) {
       const { children, ...rest } = item;
       result.push({ ...rest, padding });
+      if(!item.isToggle){
+        continue;
+        } 
       if (children && Array.isArray(children)) {
         recur(children, padding + 12);
       }
@@ -83,151 +98,162 @@ const flattenObject = (data:any) => {
 };
 
 
+    // const toggleFolder = (initialData: any, id: any, status: any) => {
+    //     let copy: any = [...initialData]
+    //     let obj: any
+    //     for (obj of copy) {
+    //         let nextObj: any = [obj]
+    //         let padding: any = 0
+    //         const flattenRecur = (nextObj: any) => {
 
-    const toggleFold = (id: any, status: any) => {
+    //             let obj: any
+    //             let stat = status
+    //             for (obj of nextObj) {
+    //                 let key: any
+    //                 console.log(obj.id, "icheckd ")
+    //                 if (obj.id == id) {
+    //                     console.log(obj, "maddy");
 
-        const updated = toggleFolder(initialData, id, status)
-        setInitialData(updated)
-    }
+    //                     const nextToggle = (copy: any) => {
 
-    const toggleFolder = (initialData: any, id: any, status: any) => {
-        let copy: any = [...initialData]
-        let obj: any
-        for (obj of copy) {
-            let nextObj: any = [obj]
-            let padding: any = 0
-            const flattenRecur = (nextObj: any) => {
+    //                         for (obj of copy) {
+    //                             let nextObj: any = [obj]
+    //                             const nextFlattenRecur = (nextObj: any) => {
 
-                let obj: any
-                let stat = status
-                for (obj of nextObj) {
-                    let key: any
-                    console.log(obj.id, "icheckd ")
-                    if (obj.id == id) {
-                        console.log(obj, "maddy");
+    //                                 let obj: any
 
-                        const nextToggle = (copy: any) => {
+    //                                 for (obj of nextObj) {
+    //                                     let key: any
+    //                                     for (key in obj) {
+    //                                           console.log("keyooo",obj.name);
+    //                                        if(obj.id==id){
+    //                                           obj.isToggle=!stat
+    //                                        }
+    //                                        else{
+    //                                           obj.isClose=stat
+    //                                           obj.isToggle=!stat
 
-                            for (obj of copy) {
-                                let nextObj: any = [obj]
-                                const nextFlattenRecur = (nextObj: any) => {
+    //                                        }  
+    //                                         if (Array.isArray(obj[key])) {
+    //                                             padding += 20
+    //                                             nextFlattenRecur(obj[key])
+    //                                         }
 
-                                    let obj: any
-
-                                    for (obj of nextObj) {
-                                        let key: any
-                                        for (key in obj) {
-                                              console.log("keyooo",obj.name);
-                                           if(obj.id==id){
-                                              obj.isToggle=!stat
-                                           }
-                                           else{
-                                              obj.isClose=stat
-                                              obj.isToggle=!stat
-
-                                           }  
-                                            if (Array.isArray(obj[key])) {
-                                                padding += 20
-                                                nextFlattenRecur(obj[key])
-                                            }
-
-                                        }
-                                    }
+    //                                     }
+    //                                 }
                                     
-                                }
+    //                             }
 
-                             nextFlattenRecur(nextObj)
-                            }
+    //                          nextFlattenRecur(nextObj)
+    //                         }
 
-                        }
-                        nextToggle([obj])
+    //                     }
+    //                     nextToggle([obj])
 
-                    }
+    //                 }
 
-                    for (key in obj) {
+    //                 for (key in obj) {
 
-                        if (Array.isArray(obj[key])) {
-                            padding += 20
-                            flattenRecur(obj[key])
-                        }
+    //                     if (Array.isArray(obj[key])) {
+    //                         padding += 20
+    //                         flattenRecur(obj[key])
+    //                     }
 
-                    }
-                }
-            }
-            flattenRecur(nextObj)
-        }
-        return copy
-    }
-
-    // const del = (id: any) => {
-    //     setActiveBox('cancel')
-    //     const updated = DeleteFolder(initialData, id)
-    //     setInitialData(updated)
+    //                 }
+    //             }
+    //         }
+    //         flattenRecur(nextObj)
+    //     }
+    //     return copy
     // }
 
-const DeleteFolder = (data: any[], id: number): any[] => {
-  return data.filter(item => {
+   const toggleFolder = (data: any[], id: any, status: any) => {
+  return data.map((item: any):any[] => {
     if (item.id === id) {
-      return false;
+      return {
+        ...item,
+        isToggle:!item.isToggle
+      };
     }
+
     if (item.children && Array.isArray(item.children)) {
-      item.children = DeleteFolder(item.children, id);
+      return {
+        ...item,
+        children: toggleFolder(item.children, id, status)
+      };
     }
-    return true;
+
+    return item;
   });
 };
 
+    // const addFolder = (initialData: any, id: any, name: any, isFolder: any) => {
+    //     let copy: any = [...initialData]
+    //     let obj: any
+    //     for (obj of copy) {
+    //         let nextObj: any = [obj]
+    //         const toogleRecur = (nextObj: any) => {
+
+    //             let obj: any
+    //             for (obj of nextObj) {
+    //                 let key: any
+    //                 console.log(obj.id, "icheckd ")
 
 
-    const addFolder = (initialData: any, id: any, name: any, isFolder: any) => {
-        let copy: any = [...initialData]
-        let obj: any
-        for (obj of copy) {
-            let nextObj: any = [obj]
-            const toogleRecur = (nextObj: any) => {
+    //                 for (key in obj) {
 
-                let obj: any
-                for (obj of nextObj) {
-                    let key: any
-                    console.log(obj.id, "icheckd ")
+    //                     console.log(obj, "frog");
+    //                     if (obj.id == id) {
+    //                         setFolderId(ps=>ps+1)
+    //                         if (isFolder) {
+    //                             obj.children.push({ id: folderId, name, isFolder: true,isToggle:obj.isToggle,isClose:!obj.isToggle, children: [] })
+    //                             break;
+    //                         }
+    //                         else {
+    //                             obj.children.push({ id: folderId, name, isFolder: false ,isToggle:!obj.isToggle,isClose:!obj.isToggle})
+    //                             break;
+    //                         }
+    //                     }
 
+    //                     else {
+    //                         if (Array.isArray(obj[key])) {
+    //                             toogleRecur(obj[key])
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         toogleRecur(nextObj)
+    //     }
+    //     return copy
+    // }
 
-                    for (key in obj) {
+const addFolder = (data: any[], id: any, name: any, isFolder: boolean) => {
+    
+  return data.map((item: any):any[]=> {
+    if (item.id === id) {
+    setFolderId(ps=>ps+1)
+      const newChild = isFolder
+        ? { id: folderId, name, isFolder: true, isToggle: item.isToggle, children: [] }
+        : { id: folderId, name, isFolder: false, isToggle: item.isToggle };
 
-                        console.log(obj, "frog");
-                        if (obj.id == id) {
-                            setFolderId(ps=>ps+1)
-                            if (isFolder) {
-                                obj.children.push({ id: folderId, name, isFolder: true,isToggle:obj.isToggle,isClose:!obj.isToggle, children: [] })
-                                break;
-                            }
-                            else {
-                                obj.children.push({ id: folderId, name, isFolder: false ,isToggle:!obj.isToggle,isClose:!obj.isToggle})
-                                break;
-                            }
-                        }
-
-                        else {
-                            if (Array.isArray(obj[key])) {
-                                toogleRecur(obj[key])
-                            }
-                        }
-                    }
-                }
-            }
-            toogleRecur(nextObj)
-        }
-        return copy
+      return {
+        ...item,
+        children: [...(item.children || []), newChild]
+      };
     }
 
-    const FileAndFolderDelete = (id: any) => {
-        setActiveBox('cancel')
-        const updated = DeleteFolder(initialData, id)
-        setInitialData(updated)
-
+    if (item.children && Array.isArray(item.children)) {
+      return {
+        ...item,
+        children: addFolder(item.children, id, name, isFolder)
+      };
     }
+    return item;
+  });
+};
 
-    // const fileDelete = (initialData: any, id: any) => {
+// const DeleteFolder = (initialData: any, id: any) => {
     //     let copy: any = [...initialData]
     //     let obj: any
     //     for (obj of copy) {
@@ -267,6 +293,18 @@ const DeleteFolder = (data: any[], id: number): any[] => {
     //     return copy
     // }
 
+const DeleteFolder = (data: any[], id: number): any[] => {
+  return data.filter(item => {
+    if (item.id === id) {
+      return false;
+    }
+    if (item.children && Array.isArray(item.children)) {
+      item.children = DeleteFolder(item.children, id);
+    }
+    return true;
+  });
+};
+
     const onchangeInput=(e:any)=>{
 
         setName(e.target.value)
@@ -301,9 +339,8 @@ setActiveBox('cancel')
                     console.log(data.marginLeft, data.name, "hhhhhh");
                     return (
                         <div style={{color:'grey',marginTop:'15px'}}>
-                            {data.isFolder ?
-                                (!data.isClose && 
-                                <div style={{ display: 'flex', gap: '5px',marginTop:'10px', padding: `5px ${data.padding}px` }} id='folder'>
+                            {data.isFolder ?                 
+                                (<div style={{ display: 'flex', gap: '5px',marginTop:'10px', padding: `5px ${data.padding}px` }} id='folder'>
                                     <div style={{display:'flex',cursor:'pointer'}} onClick={() => { toggleFold(data.id, data.isToggle) }} >
                                     {data.isToggle ? 
                                     <MdExpandLess style={{ margin: '2px',color:'white',fontWeight:'800'}}/> : 
@@ -318,7 +355,7 @@ setActiveBox('cancel')
                                         <MdDeleteOutline style={{margin:0,color:'#B50000',cursor:'pointer'}} onClick={() => { FileAndFolderDelete(data.id) }} />
                                     </div>
                                 </div>)
-                                : (!data.isClose && <div style={{ display: 'flex', gap: '3px',marginTop:'5px',padding: `5px ${data.padding}px`,cursor:'pointer' }} id='file'>
+                                : (<div style={{ display: 'flex', gap: '3px',marginTop:'5px',padding: `5px ${data.padding}px`,cursor:'pointer' }} id='file'>
                                     <p style={{ color: '#ADADAD',margin:0,paddingLeft:'8px',fontSize:'14px'}}>{data.name}</p>
                                     <MdDeleteOutline style={{color:'#B50000',cursor:'pointer'}} onClick={() => { FileAndFolderDelete(data.id) }} />
                                 </div>)}
