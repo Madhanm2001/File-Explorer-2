@@ -1,4 +1,4 @@
-import {useEffect, useState } from 'react'
+import {useEffect, useRef, useState } from 'react'
 import { MdExpandMore } from "react-icons/md";
 import { MdExpandLess } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
@@ -15,10 +15,15 @@ const FolderAndFile = ({ data }: any) => {
     const[id,setId]=useState(0)
     const[name,setName]=useState('')
     const [folderId,setFolderId]=useState(16)
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         flattenobj()
     }, [initialData])
+
+    useEffect(() => {
+  containerRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}, [activeBox]);
     console.log(arrayObj, "initialData")
 
     const AddFolderandFile = (id: any, name: any, isFolder: any) => {
@@ -333,7 +338,7 @@ setActiveBox('cancel')
     }
 
     return (
-        <div style={{marginTop:"25px"}}>
+        <div style={{marginTop:"25px"}} >
             {
                 arrayObj.map((data: any) => {
                     console.log(data.marginLeft, data.name, "hhhhhh");
@@ -361,10 +366,21 @@ setActiveBox('cancel')
                                 </div>)}
                         </div>)
                 })
+
+            //     (activeBox==="file"||activeBox==="folder")&&(<div style={{marginTop:'50px',color:'grey'}}>    
+            // <form action="">
+            //      <div style={{fontWeight:700,fontSize:'15px',color:'white'}}>{activeBox==="file"?'Enter file name':activeBox==="folder"?'Enter folder name':''}</div>
+            //      <input type="text" value={name} onChange={onchangeInput} style={{border:'3px grey solid',background:'black',color:'white',outline:0,height:'20px',borderRadius:'5px',marginTop:'10px'}}/>
+            // </form>
+            // <div style={{display:'flex',marginTop:'10px',gap:'10px'}}>
+            //         <button style={{background:"green",border:'none',color:'white',padding:'8px 10px',borderRadius:'5px'}} onClick={()=>{onclickAdd(activeBox)}}>Add</button>
+            //         <button style={{background:"red",border:'none',color:'white',padding:'8px 10px',borderRadius:'5px'}} onClick={()=>{setActiveBox('cancel')}}>cancel</button>
+            // </div>
+            // </div>)
             }
 
             
-            {(activeBox==="file"||activeBox==="folder")&&(<div style={{marginTop:'50px',color:'grey'}}>    
+            {(activeBox==="file"||activeBox==="folder")&&(<div style={{marginTop:'50px',color:'grey'}} ref={containerRef}>    
             <form action="">
                  <div style={{fontWeight:700,fontSize:'15px',color:'white'}}>{activeBox==="file"?'Enter file name':activeBox==="folder"?'Enter folder name':''}</div>
                  <input type="text" value={name} onChange={onchangeInput} style={{border:'3px grey solid',background:'black',color:'white',outline:0,height:'20px',borderRadius:'5px',marginTop:'10px'}}/>
