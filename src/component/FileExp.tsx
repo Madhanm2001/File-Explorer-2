@@ -12,17 +12,17 @@ const initialData = [
 ], 
   },
   {
-    id:11,
+    id:3,
     name: "src",
     isFolder: true,
     isToggle:true,
     
     children: [
-      { id:12, name: "App.js", isFolder: false ,isToggle:true},
-      { id:13, name: "index.js", isFolder: false ,isToggle:true},
+      { id:4, name: "App.js", isFolder: false ,isToggle:true},
+      { id:5, name: "index.js", isFolder: false ,isToggle:true},
     ],
   },
-  { id:15, name: "package.json", isFolder: false,isToggle:true}
+  { id:6, name: "package.json", isFolder: false,isToggle:true}
 ];
 
 const FileExplorer = () => {

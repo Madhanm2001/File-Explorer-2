@@ -14,7 +14,7 @@ const FolderAndFile = ({ data }: any) => {
     const [activeBox,setActiveBox]=useState("cancel")
     const[id,setId]=useState(0)
     const[name,setName]=useState('')
-    const [folderId,setFolderId]=useState(16)
+    const [folderId,setFolderId]=useState(7)
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
