@@ -42,9 +42,9 @@ const FolderAndFile = ({ data }: any) => {
         setInitialData(updated)
     }
 
-    const toggleFold = (id: any, status: any) => {
+    const toggleFold = (id: any) => {
 
-        const updated = toggleFolder(initialData, id, status)
+        const updated = toggleFolder(initialData, id)
         setInitialData(updated)
     }
 
@@ -172,7 +172,7 @@ const flattenObject = (data:any) => {
     //     return copy
     // }
 
-   const toggleFolder = (data: any[], id: any, status: any) => {
+   const toggleFolder = (data: any[], id: any) => {
   return data.map((item: any):any[] => {
     if (item.id === id) {
       return {
@@ -184,7 +184,7 @@ const flattenObject = (data:any) => {
     if (item.children && Array.isArray(item.children)) {
       return {
         ...item,
-        children: toggleFolder(item.children, id, status)
+        children: toggleFolder(item.children, id)
       };
     }
 
@@ -346,7 +346,7 @@ setActiveBox('cancel')
                         <div style={{color:'grey',marginTop:'15px'}}>
                             {data.isFolder ?                 
                                 (<div style={{ display: 'flex', gap: '5px',marginTop:'10px', padding: `5px ${data.padding}px` }} id='folder'>
-                                    <div style={{display:'flex',cursor:'pointer'}} onClick={() => { toggleFold(data.id, data.isToggle) }} >
+                                    <div style={{display:'flex',cursor:'pointer'}} onClick={() => { toggleFold(data.id) }} >
                                     {data.isToggle ? 
                                     <MdExpandLess style={{ margin: '2px',color:'white',fontWeight:'800'}}/> : 
                                     <MdExpandMore style={{ margin:'2px',color:'white',fontWeight:'800'}}/>}
